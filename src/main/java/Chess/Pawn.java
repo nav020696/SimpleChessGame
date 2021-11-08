@@ -13,20 +13,30 @@ public class Pawn extends ChessPiece {
 
     @Override
     public boolean canMoveToPosition(ChessBoard chessBoard, int line, int column, int toLine, int toColumn) {
-        if (toLine > 7 || toLine < 0 || toColumn < 0 || toColumn > 7) {
-            return false;
-        } else if (line == toLine && column == toColumn) {
-            return false;
+        if (checkPos(line) && checkPos(column) && checkPos(toLine) && checkPos(toColumn) && chessBoard.board[line][column] != null) {
+            if (column == toColumn) {
+                if (color.equals("White") && line == 1) {
+                    return (line + 1 == toLine || (line + 2 == toLine && chessBoard.board[line + 1][column] == null))
+                            && chessBoard.board[toLine][toColumn] == null;
+                } else if (color.equals("Black") && line == 6) {
+                    return (line - 1 == toLine || (line - 2 == toLine && chessBoard.board[line - 1][column] == null))
+                            && chessBoard.board[toLine][toColumn] == null;
+                } else if (color.equals("White")) {
+                    return line + 1 == toLine && chessBoard.board[toLine][toColumn] == null;
+                } else if (color.equals("Black")) {
+                    return line - 1 == toLine && chessBoard.board[toLine][toColumn] == null;
+                }
+            } else {
+                if (chessBoard.board[toLine][toColumn] != null && !chessBoard.board[toLine][toColumn].color.equals(this.color)) {
+                    if (color.equals("White")) {
+                        return line + 1 == toLine && (column + 1 == toColumn || column - 1 == toColumn);
+                    } else if (color.equals("Black")) {
+                        return line - 1 == toLine && (column + 1 == toColumn || column - 1 == toColumn);
+                    }
+                }
+            }
         }
-        if (color.equals("White") && line == 1) {
-            return (line + 1 == toLine || line + 2 == toLine) && column == toColumn;
-        }
-        if (color.equals("Black") && line == 6) {
-            return (line - 1 == toLine || line - 2 == toLine) && column == toColumn;
-        }
-        if (color.equals("White") && line + 1 == toLine && column == toColumn) {
-            return true;
-        } else return color.equals("Black") && line - 1 == toLine && column == toColumn;
+        return false;
     }
 
     @Override

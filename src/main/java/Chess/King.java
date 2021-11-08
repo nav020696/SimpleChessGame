@@ -12,14 +12,16 @@ public class King extends ChessPiece{
 
     @Override
     public boolean canMoveToPosition(ChessBoard chessBoard, int line, int column, int toLine, int toColumn) {
-        if (toLine > 7 || toLine < 0 || toColumn < 0 || toColumn > 7){
-            return false;
-        }else if (line == toLine && column == toColumn){
-            return false;
+        if (checkPos(line) && checkPos(column) && checkPos(toLine) && checkPos(toColumn)) {
+            if (line != toLine && column != toColumn &&
+                    (chessBoard.board[toLine][toColumn] == null || !chessBoard.board[toLine][toColumn].color.equals(this.color))
+                    && chessBoard.board[line][column] != null) {
+                return (line == toLine && (column + 1 == toColumn || column - 1 == toColumn)) ||
+                        (column == toColumn && (line + 1 == toLine || line - 1 == toLine)) ||
+                        (Math.abs(toColumn - column) == 1 && Math.abs(toLine - line) == 1);
+            }
         }
-        return (line == toLine && (column + 1 == toColumn || column - 1 == toColumn)) ||
-                (column == toColumn && (line + 1 == toLine || line - 1 == toLine)) ||
-                (Math.abs(toColumn - column) == 1 && Math.abs(toLine - line) == 1);
+        return false;
     }
 
     @Override

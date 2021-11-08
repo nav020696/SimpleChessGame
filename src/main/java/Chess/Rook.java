@@ -13,12 +13,14 @@ public class Rook extends ChessPiece
 
     @Override
     public boolean canMoveToPosition(ChessBoard chessBoard, int line, int column, int toLine, int toColumn) {
-        if (toLine > 7 || toLine < 0 || toColumn < 0 || toColumn > 7){
-            return false;
-        }else if (line == toLine && column == toColumn){
-            return false;
+        if (checkPos(line) && checkPos(column) && checkPos(toLine) && checkPos(toColumn)) {
+            if (line != toLine && column != toColumn &&
+                    (chessBoard.board[toLine][toColumn] == null || !chessBoard.board[toLine][toColumn].color.equals(this.color))
+                    && chessBoard.board[line][column] != null) {
+                return (line != toLine && column == toColumn) || (line == toLine && column != toColumn);
+            }
         }
-        return (line != toLine && column == toColumn) || (line == toLine && column != toColumn);
+        return false;
     }
 
     @Override
