@@ -22,7 +22,7 @@ public class King extends ChessPiece{
             if (isUnderAttack(chessBoard, toLine, toColumn)){
                 return false;
             }
-            return chessBoard.board[toLine][toColumn] == null || chessBoard.board[toLine][toColumn].color.equals(this.color);
+            return chessBoard.board[toLine][toColumn] == null || !chessBoard.board[toLine][toColumn].color.equals(this.color);
         }else {
             return false;
         }
