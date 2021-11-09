@@ -1,7 +1,6 @@
 package Chess;
 
-public class Rook extends ChessPiece
-{
+public class Rook extends ChessPiece {
     public Rook(String color) {
         super(color);
     }
@@ -14,13 +13,51 @@ public class Rook extends ChessPiece
     @Override
     public boolean canMoveToPosition(ChessBoard chessBoard, int line, int column, int toLine, int toColumn) {
         if (checkPos(line) && checkPos(column) && checkPos(toLine) && checkPos(toColumn)) {
-            if (line != toLine && column != toColumn &&
-                    (chessBoard.board[toLine][toColumn] == null || !chessBoard.board[toLine][toColumn].color.equals(this.color))
+            if ((chessBoard.board[toLine][toColumn] == null || !chessBoard.board[toLine][toColumn].color.equals(this.color))
                     && chessBoard.board[line][column] != null) {
-                return (line != toLine && column == toColumn) || (line == toLine && column != toColumn);
+                //ходим вертикально, проверяем, что нет фигур до этого
+                if (column == toColumn && line != toLine) {
+                    if (toLine > line) { //двигаемся вверх
+                        for (int i = 1; i < toLine - line; i++) {
+                            if (chessBoard.board[line + i][column] != null) {
+                                return false;
+                            }
+                        }
+                        return true;
+                    } else { //двигаемся вниз
+                        for (int i = 1; i < line - toLine; i++) {
+                            if (chessBoard.board[line - i][column] != null) {
+                                return false;
+                            }
+                        }
+                        return true;
+                    }
+                    //ходим горизонтально, проверяем, что нет фигур до этого
+                } else if (line == toLine && column != toColumn) {
+                    if (toColumn > column) { //двигаемся вправо
+                        for (int i = 1; i < toColumn - column; i++) {
+                            if (chessBoard.board[line][column + i] != null) {
+                                return false;
+                            }
+                        }
+                        return true;
+                    } else { //двигаемся влево
+                        for (int i = 1; i < column - toColumn; i++) {
+                            if (chessBoard.board[line][column - i] != null) {
+                                return false;
+                            }
+                        }
+                        return true;
+                    }
+                } else {
+                    return false;
+                }
+            } else {
+                return false;
             }
+        } else {
+            return false;
         }
-        return false;
     }
 
     @Override

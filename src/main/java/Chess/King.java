@@ -13,22 +13,40 @@ public class King extends ChessPiece{
     @Override
     public boolean canMoveToPosition(ChessBoard chessBoard, int line, int column, int toLine, int toColumn) {
         if (checkPos(line) && checkPos(column) && checkPos(toLine) && checkPos(toColumn)) {
-            if (line != toLine && column != toColumn &&
-                    (chessBoard.board[toLine][toColumn] == null || !chessBoard.board[toLine][toColumn].color.equals(this.color))
-                    && chessBoard.board[line][column] != null) {
-                return (line == toLine && (column + 1 == toColumn || column - 1 == toColumn)) ||
-                        (column == toColumn && (line + 1 == toLine || line - 1 == toLine)) ||
-                        (Math.abs(toColumn - column) == 1 && Math.abs(toLine - line) == 1);
+            if (line == toLine && column == toColumn){
+                return false;
             }
+            if (Math.abs(toLine - line) > 1 || Math.abs(toColumn - column) > 1){
+                return false;
+            }
+            if (isUnderAttack(chessBoard, toLine, toColumn)){
+                return false;
+            }
+            return chessBoard.board[toLine][toColumn] == null || chessBoard.board[toLine][toColumn].color.equals(this.color);
+        }else {
+            return false;
         }
-        return false;
     }
 
     @Override
     public String getSymbol() {
         return "K";
     }
-    public boolean isUnderAttack(ChessBoard board, int line, int column){
-        return false;
+    public boolean isUnderAttack(ChessBoard chessBoard, int line, int column){
+        if (checkPos(line) && checkPos(column)){
+            for (int i = 0; i < 7; i++) {
+                for (int j = 0; j < 7; j++) {
+                    if (chessBoard.board[i][j]!= null){
+                        if (!chessBoard.board[i][j].getColor().equals(this.color) &&
+                                chessBoard.board[i][j].canMoveToPosition(chessBoard, i, j, line, column)){
+                            return true;
+                        }
+                    }
+                }
+            }
+            return false;
+        }else{
+            return false;
+        }
     }
 }
